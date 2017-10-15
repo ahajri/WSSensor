@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ahajri.ws.sensor</groupId>
+	<artifactId>WSSensorTemperature</artifactId>
+	<name>Sensor Web Service</name>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+
+	<properties>
+		<version.wildfly.swarm>2017.9.4</version.wildfly.swarm>
+		<version.wildfly.plugin>1.2.0.Final</version.wildfly.plugin>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<version.WSHadoopCore>1.0.7</version.WSHadoopCore>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.kafka>0.9.0.0</version.kafka>
+		<jboss.resteasy.version>3.0.16.Final</jboss.resteasy.version>
+		
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-ejb-client-bom</artifactId>
+				<version>11.0.0.CR1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+
+	<build>
+		<finalName>WSSondeTemp</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>${version.wildfly.plugin}</version>
+				<configuration>
+					<hostname>127.0.0.1</hostname>
+					<port>10093</port>
+					<username>ahajri</username>
+					<password>Pass@Caccia55</password>
+					<name>WSSondeTemp.war</name>
+				</configuration>
+
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- Java EE 7 dependency -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>7.0.0.pre5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>7.0.0.pre5</version>
+		</dependency>
+
+		<!--Jersey -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.19.4</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jackson-core-asl</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jackson-jaxrs</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jackson-mapper-asl</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jackson-xc</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<!-- jackson -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-xc</artifactId>
+		</dependency>
+		<!-- EJB Client jar -->
+		<dependency>
+			<groupId>com.ejb.core</groupId>
+			<artifactId>DBCore-client</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-naming</artifactId>
+		</dependency>
+
+		<!-- JBoss EJB client API jar. We use runtime scope because the EJB client 
+			API isn't directly used in this example. We just need it in our runtime classpath -->
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jboss-ejb-client</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- security -->
+		<dependency>
+			<groupId>org.wildfly.security</groupId>
+			<artifactId>wildfly-elytron</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.security</groupId>
+			<artifactId>wildfly-security-manager</artifactId>
+			<version>1.1.2.Final</version>
+		</dependency>
+		<!-- HTTP Transport -->
+		<dependency>
+			<groupId>org.wildfly.wildfly-http-client</groupId>
+			<artifactId>wildfly-http-client-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.wildfly-http-client</groupId>
+			<artifactId>wildfly-http-naming-client</artifactId>
+		</dependency>
+	</dependencies>
+
+	
+
+
+	<developers>
+		<developer>
+			<id>ahajri</id>
+			<name>Anis HAJRI</name>
+			<email>anis.hajri@gmail.com</email>
+			<organization>UMANIS</organization>
+			<organizationUrl>www.barcid-it.com</organizationUrl>
+			<roles>
+				<role>J2EE Expert</role>
+			</roles>
+			<timezone>CET</timezone>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>BARCID IT</name>
+		<url>www.barcid-it.com</url>
+	</organization>
+</project>
